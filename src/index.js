@@ -1,4 +1,8 @@
-require("dotenv").config();
+require("dotenv").config({
+  path: !(process.env.NODE_ENV === undefined)
+    ? `.env.${process.env.NODE_ENV}`
+    : ".env",
+});
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -28,5 +32,9 @@ app.use((error, request, response, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`API Online on http://localhost:${port}!`);
+  console.log(
+    `API Online on http://localhost:${port} - ENV: ${
+      process.env.NODE_ENV || "Prod"
+    }!`
+  );
 });
