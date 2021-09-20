@@ -52,6 +52,7 @@ exports.registerUser = (request, response) => {
 };
 
 exports.userLogin = (request, response) => {
+  console.log(request.body);
   db.getConnection((error, conn) => {
     if (error) return response.status(500).json({ error: error });
 
@@ -84,9 +85,16 @@ exports.userLogin = (request, response) => {
                 },
                 process.env.JWT_KEY
               );
-              return response
-                .status(200)
-                .json({ message: "Authentication Success!", token: userToken });
+
+              const user = {
+                userName: results[0].name,
+                userEmail: results[0].email,
+              };
+              return response.status(200).json({
+                message: "Authentication Success!",
+                token: userToken,
+                user,
+              });
             }
             return response
               .status(401)
